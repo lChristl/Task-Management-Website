@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WorkNest Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #c5c5b5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-circle {
+      width: 140px;
+      height: 140px;
+      background-color: #eee8e0;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+
+    .logo-text {
+      font-size: 40px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .form-card {
+      background-color: #f2ece5;
+      border-radius: 20px;
+      padding: 40px 30px;
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-card input {
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      background-color: #ffffff;
+      color: #666;
+    }
+
+    .form-card button {
+      padding: 15px;
+      border: none;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login-btn {
+      background-color: #b1c7a1;
+      color: #2e2e1d;
+    }
+
+    .create-btn {
+      background-color: #3e362d;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <div class="logo-circle"></div>
+      <div class="logo-text">WorkNest</div>
+    </div>
+    <div class="form-card">
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
+      <button class="login-btn" onclick="handleLogin()">Log in</button>
+      <button class="create-btn">Create new account</button>
+    </div>
+  </div>
+
+  <script>
+    function handleLogin() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (email === "test" && password === "123") {
+        window.location.href = "testhome.html"; // Replace with your destination file
+      } else {
+        alert("Invalid credentials. Please try again.");
+      }
+    }
+  </script>
+</body>
+</html>
