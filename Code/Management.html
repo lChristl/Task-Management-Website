@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .header, .footer {
+      background-color: #a4c3a2;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav {
+      display: flex;
+      gap: 20px;
+    }
+    .main {
+      display: flex;
+      flex-direction: row;
+      padding: 20px;
+      gap: 40px;
+    }
+    .calendar, .deadlines {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .calendar {
+      flex: 1;
+    }
+    .deadlines {
+      flex: 1;
+    }
+    .task-popup {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      background-color: #fff;
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+    .calendar-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .calendar-table th, .calendar-table td {
+      width: 14.28%;
+      height: 80px;
+      border: 1px solid #ddd;
+      text-align: center;
+      vertical-align: top;
+    }
+    .calendar-table th {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div><strong>Task Manager</strong></div>
+    <div class="nav">
+      <a href="#">Dashboard</a>
+      <a href="#">Tasks</a>
+      <a href="#">Calendar</a>
+      <a href="#">Profile</a>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="calendar">
+      <button onclick="togglePopup()">+ Add new task</button>
+      <input type="text" placeholder="Search...">
+      <div id="calendar"></div>
+    </div>
+
+    <div class="deadlines">
+      <h3>Upcoming Deadlines</h3>
+      <ul id="deadline-list"></ul>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="togglePopup()"></div>
+
+  <div class="task-popup" id="task-popup">
+    <h3>New Task</h3>
+    <label>Task name:</label><br>
+    <input type="text" id="taskName"><br><br>
+    <label>Course:</label><br>
+    <input type="text" id="taskCourse"><br><br>
+    <label>Priority:</label><br>
+    <select id="taskPriority">
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select><br><br>
+    <label>Deadline:</label><br>
+    <input type="date" id="taskDate"><br><br>
+    <button onclick="addTask()">Add</button>
+    <button onclick="togglePopup()">Cancel</button>
+  </div>
+
+  <script>
+    function togglePopup() {
+      const popup = document.getElementById("task-popup");
+      const overlay = document.getElementById("overlay");
+      const isVisible = popup.style.display === "block";
+      popup.style.display = isVisible ? "none" : "block";
+      overlay.style.display = isVisible ? "none" : "block";
+    }
+
+    const tasks = [];
+
+    function addTask() {
+      const name = document.getElementById("taskName").value;
+      const course = document.getElementById("taskCourse").value;
+      const priority = document.getElementById("taskPriority").value;
+      const date = document.getElementById("taskDate").value;
+      if (!name || !date) return alert("Please enter all required fields");
+      tasks.push({ name, course, priority, date });
+      updateDeadlines();
+      togglePopup();
+      document.getElementById("taskName").value = "";
+      document.getElementById("taskCourse").value = "";
+      document.getElementById("taskPriority").value = "Low";
+      document.getElementById("taskDate").value = "";
+    }
+
+    function updateDeadlines() {
+      const list = document.getElementById("deadline-list");
+      list.innerHTML = "";
+      tasks.forEach(task => {
+        const li = document.createElement("li");
+        li.textContent = `${task.date} - ${task.name} (${task.priority})`;
+        list.appendChild(li);
+      });
+    }
+
+    function renderCalendar() {
+      const calendar = document.getElementById("calendar");
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth();
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      let table = `<table class='calendar-table'>
+        <tr><th colspan='7'>${today.toLocaleString('default', { month: 'long' })} ${year}</th></tr>
+        <tr>
+          <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+        </tr><tr>`;
+
+      for (let i = 0; i < firstDay; i++) {
+        table += "<td></td>";
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        const taskDay = tasks.find(task => task.date === dateStr);
+        table += `<td>${day}${taskDay ? '<br><small>' + taskDay.name + '</small>' : ''}</td>`;
+        if ((firstDay + day) % 7 === 0) {
+          table += "</tr><tr>";
+        }
+      }
+
+      table += "</tr></table>";
+      calendar.innerHTML = table;
+    }
+
+    setInterval(renderCalendar, 1000);
+  </script>
+</body>
+</html>
