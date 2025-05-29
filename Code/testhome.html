@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #d6d7cc;
+    }
+    .header {
+      background-color: #c9dbc4;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header div:first-child {
+      width: 40px;
+      height: 40px;
+      background-color: #fff;
+    }
+    .nav {
+      display: flex;
+      gap: 40px;
+      font-weight: bold;
+    }
+    .main {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px;
+      background-color: #d6d7cc;
+      gap: 30px;
+    }
+    .calendar {
+      background-color: #fefaf6;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    .calendar-header {
+      background-color: #37352f;
+      color: white;
+      text-align: center;
+      padding: 5px;
+      border-radius: 10px 10px 0 0;
+      font-size: 14px;
+    }
+    .calendar-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .calendar-table th, .calendar-table td {
+      width: 14.28%;
+      height: 50px;
+      border: 1px solid #ddd;
+      text-align: center;
+      vertical-align: top;
+    }
+    .add-task-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .add-task-bar button {
+      background-color: #fefaf6;
+      padding: 10px;
+      border-radius: 20px;
+      border: none;
+      font-weight: bold;
+      box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    .add-task-bar input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: none;
+    }
+    .deadlines {
+      background-color: #fefaf6;
+      border-radius: 15px;
+      padding: 20px;
+      width: 400px;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+    .deadlines h3 {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 0;
+      color: #37352f;
+    }
+    .deadline-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+    .deadline-item span {
+      font-size: 14px;
+      color: #37352f;
+    }
+    .task-popup {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      background-color: #fff;
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div></div>
+    <div class="nav">
+      <a href="#">Home</a>
+      <a href="#">Calendar</a>
+      <a href="#">Profile</a>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="calendar">
+      <div class="add-task-bar">
+        <button onclick="togglePopup()">+ Add new task</button>
+        <input type="text" placeholder="Search...">
+      </div>
+      <div class="calendar-header">May 2025</div>
+      <div id="calendar"></div>
+    </div>
+
+    <div class="deadlines">
+      <h3>Upcoming Deadlines</h3>
+      <div id="deadline-list"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="togglePopup()"></div>
+
+  <div class="task-popup" id="task-popup">
+    <h3>New Task</h3>
+    <label>Task name:</label><br>
+    <input type="text" id="taskName"><br><br>
+    <label>Course:</label><br>
+    <input type="text" id="taskCourse"><br><br>
+    <label>Priority:</label><br>
+    <select id="taskPriority">
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select><br><br>
+    <label>Deadline:</label><br>
+    <input type="date" id="taskDate"><br><br>
+    <button onclick="addTask()">Add</button>
+    <button onclick="togglePopup()">Cancel</button>
+  </div>
+
+  <script>
+    const tasks = [];
+
+    function togglePopup() {
+      const popup = document.getElementById("task-popup");
+      const overlay = document.getElementById("overlay");
+      const isVisible = popup.style.display === "block";
+      popup.style.display = isVisible ? "none" : "block";
+      overlay.style.display = isVisible ? "none" : "block";
+    }
+
+    function addTask() {
+      const name = document.getElementById("taskName").value;
+      const course = document.getElementById("taskCourse").value;
+      const priority = document.getElementById("taskPriority").value;
+      const date = document.getElementById("taskDate").value;
+
+      if (!name || !date) {
+        alert("Please enter all required fields");
+        return;
+      }
+
+      tasks.push({ name, course, priority, date });
+      togglePopup();
+      document.getElementById("taskName").value = "";
+      document.getElementById("taskCourse").value = "";
+      document.getElementById("taskPriority").value = "Low";
+      document.getElementById("taskDate").value = "";
+
+      updateDeadlines();
+      renderCalendar();
+    }
+
+    function updateDeadlines() {
+      const list = document.getElementById("deadline-list");
+      list.innerHTML = "";
+
+      const upcoming = tasks
+        .filter(task => new Date(task.date) >= new Date())
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      upcoming.forEach(task => {
+        const div = document.createElement("div");
+        div.className = "deadline-item";
+        div.innerHTML = `<span><strong>${task.name}</strong> - Due: ${task.date}</span>`;
+        list.appendChild(div);
+      });
+    }
+
+    function renderCalendar() {
+      const calendar = document.getElementById("calendar");
+      const year = 2025;
+      const month = 4; // May (0-indexed)
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      let table = `<table class='calendar-table'>
+        <tr>
+          <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+        </tr><tr>`;
+
+      let dayOfWeek = firstDay;
+
+      for (let i = 0; i < firstDay; i++) {
+        table += "<td></td>";
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `2025-05-${day.toString().padStart(2, '0')}`;
+        const taskList = tasks.filter(task => task.date === dateStr);
+        const taskHTML = taskList.map(t => `<small>${t.name}</small>`).join("<br>");
+
+        table += `<td>${day}${taskHTML ? "<br>" + taskHTML : ""}</td>`;
+
+        dayOfWeek++;
+        if (dayOfWeek % 7 === 0 && day !== daysInMonth) {
+          table += "</tr><tr>";
+        }
+      }
+
+      table += "</tr></table>";
+      calendar.innerHTML = table;
+    }
+
+    renderCalendar();
+    updateDeadlines();
+  </script>
+</body>
+</html>
