@@ -1,36 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WorkNest Login</title>
   <link rel="stylesheet" href="worknest.css" />
 </head>
 <body class="login-page">
   <div class="container">
     <div class="logo">
-      <div class="logo-circle"></div>
-      <div class="logo-text">WorkNest</div>
+      <img src="Logo.png" alt="Worknest"width="200px"height="200px"> 
     </div>
     <div class="form-card">
       <input type="email" id="email" placeholder="Email">
       <input type="password" id="password" placeholder="Password">
-      <button class="login-btn" onclick="handleLogin()">Log in</button>
+      <button class="login-btn" onclick="window.location.href='Home.html';">Log in</button>
       <button class="create-btn">Create new account</button>
     </div>
   </div>
-
-  <script>
-    function handleLogin() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      if (email === "test" && password === "123") {
-        window.location.href = "Home.html";
-      } else {
-        alert("Invalid credentials. Please try again.");
-      }
-    }
-  </script>
 </body>
 </html>
