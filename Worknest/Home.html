@@ -1,124 +1,312 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Task Manager</title>
-  <link rel="stylesheet" href="worknest.css" />
+  <title>WorkNest - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background-color: #eae3db;
+    }
+
+    header {
+      background-color: #b6d1a4;
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      font-size: 32px;
+      color: #2c4132;
+    }
+
+    .logo span {
+      margin-left: 8px;
+      color: #2c4132;
+    }
+
+    nav a {
+      margin-left: 32px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #2d2b24;
+      font-size: 24px;
+    }
+
+    .content {
+      padding: 32px;
+      background-color: #eae3db;
+      border-top: 1px solid #ccc;
+      padding-bottom: 80px;
+    }
+
+    .addTask {
+      background-color: #2d2b24;
+      color: white;
+      border: none;
+      padding: 8px 24px;
+      border-radius: 12px;
+      float: right;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .task-popup {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      background-color: #eae3db;
+      padding: 20px;
+      border: 2px solid #3e3a31;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 1000;
+      width: 300px;
+    }
+
+    #popup-toggle:checked ~ .content .task-popup {
+      display: block;
+    }
+
+    #popup-toggle:checked ~ .overlay {
+      display: block;
+    }
+
+    #task-name, #subject, select, input[type="date"] {
+      width: 100%;
+      height: 35px;
+      border-radius: 10px;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    h2 {
+      font-size: 32px;
+      margin-top: 0;
+      color: #2d2b24;
+    }
+
+    .search-box {
+      margin: 32px 0;
+      width: 100%;
+      padding: 16px 48px 16px 40px;
+      border-radius: 24px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      background: url('https://www.svgrepo.com/show/488200/search.svg') no-repeat 12px center;
+      background-size: 20px;
+    }
+
+    .all-tasks-label {
+      font-size: 24px;
+      margin-bottom: 16px;
+      color: #3e3a31;
+      font-weight: 600;
+    }
+
+    .task-table {
+      width: 100%;
+      background-color: #f5f0ea;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px solid #3e3a31;
+    }
+
+    .task-table th, .task-table td {
+      padding: 19.2px;
+      text-align: left;
+      vertical-align: middle;
+      border-bottom: 1px solid #3e3a31;
+      border-right: 1px solid #3e3a31;
+    }
+
+    .task-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .task-table th:last-child, .task-table td:last-child {
+      border-right: none;
+    }
+
+    .circle-checkbox {
+      appearance: none;
+      background-color: #fff;
+      border: 2px solid #333;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .circle-checkbox:checked::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 10px;
+      height: 10px;
+      background-color: #333;
+      border-radius: 50%;
+    }
+
+    .task-actions {
+      white-space: nowrap;
+    }
+
+    .task-actions button {
+      background: none;
+      border: none;
+      font-size: 19.2px;
+      margin: 0 4.8px;
+      cursor: pointer;
+    }
+
+    .task-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .cancel-btn {
+      background-color: #3e3a31;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    button {
+      background-color: #b6d1a4;
+      color: #3e3a31;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .main-footer {
+      background-color: #423F32;
+      color: #eae3db;
+      padding: 24px;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .main-footer p {
+      margin: 0;
+      font-size: 14.4px;
+    }
+  </style>
 </head>
-<body class="home-page">
-  <div class="header">
-    <div><strong>Task Manager</strong></div>
-    <div class="nav">
-      <a href="#">Dashboard</a>
-      <a href="#">Tasks</a>
-      <a href="#">Calendar</a>
-      <a href="#">Profile</a>
-    </div>
+<body>
+
+<input type="checkbox" id="popup-toggle" hidden>
+
+<header>
+  <div class="logo">
+    <img src="Logo.png" width="60" height="60" alt="WorkNest Logo">
+    <span>WorkNest</span>
   </div>
+  <nav>
+    <a href="Home.html">Home</a>
+    <a href="Calendar.html">Calendar</a>
+    <a href="#">Profile</a>
+  </nav>
+</header>
 
-  <div class="main">
-    <div class="calendar">
-      <button onclick="togglePopup()">+ Add new task</button>
-      <input type="text" placeholder="Search...">
-      <div id="calendar"></div>
-    </div>
+<div class="overlay"></div>
 
-    <div class="deadlines">
-      <h3>Upcoming Deadlines</h3>
-      <ul id="deadline-list"></ul>
-    </div>
-  </div>
+<div class="content">
+  <label for="popup-toggle" class="addTask">+ Add new task</label>
 
-  <div class="overlay" id="overlay" onclick="togglePopup()"></div>
-
-  <div class="task-popup" id="task-popup">
-    <h3>New Task</h3>
+  <div class="task-popup">
+    <h2 style="text-align: center;">New Task</h2>
     <label>Task name:</label><br>
-    <input type="text" id="taskName"><br><br>
+    <input type="text" id="task-name"><br><br>
     <label>Subject:</label><br>
-    <input type="text" id="taskCourse"><br><br>
+    <input type="text" id="subject"><br><br>
     <label>Priority:</label><br>
-    <select id="taskPriority">
+    <select>
       <option value="Low">Low</option>
       <option value="Medium">Medium</option>
       <option value="High">High</option>
     </select><br><br>
     <label>Deadline:</label><br>
-    <input type="date" id="taskDate"><br><br>
-    <button onclick="addTask()">Add</button>
-    <button onclick="togglePopup()">Cancel</button>
+    <input type="date"><br><br>
+    <label for="popup-toggle" class="cancel-btn">Cancel</label>
+    <button>Add</button>
   </div>
 
-  <!-- <script>
-    function togglePopup() {
-      const popup = document.getElementById("task-popup");
-      const overlay = document.getElementById("overlay");
-      const isVisible = popup.style.display === "block";
-      popup.style.display = isVisible ? "none" : "block";
-      overlay.style.display = isVisible ? "none" : "block";
-    }
+  <h2>Welcome, User!</h2>
+  <input class="search-box" type="text" placeholder="Search tasks..." />
 
-    const tasks = [];
+  <div class="all-tasks-label">All Tasks</div>
+  <table class="task-table">
+    <tr>
+      <th></th>
+      <th>Task</th>
+      <th>Subject</th>
+      <th>Due Date</th>
+      <th>Priority</th>
+      <th>Actions</th>
+    </tr>
+    <tr>
+      <td><input type="checkbox" class="circle-checkbox"></td>
+      <td contenteditable="true" class="task-name">Making a website using html</td>
+      <td>WebTech</td>
+      <td>06/13/2025</td>
+      <td>Medium</td>
+      <td class="task-actions">
+        <button>✎</button>
+        <button>🗑️</button>
+      </td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" class="circle-checkbox"></td>
+      <td contenteditable="true" class="task-name">Program a Bank System using Java</td>
+      <td>OOP</td>
+      <td>06/05/2025</td>
+      <td>Hard</td>
+      <td class="task-actions">
+        <button>✎</button>
+        <button>🗑️</button>
+      </td>
+    </tr>
+  </table>
+</div>
 
-    function addTask() {
-      const name = document.getElementById("taskName").value;
-      const course = document.getElementById("taskCourse").value;
-      const priority = document.getElementById("taskPriority").value;
-      const date = document.getElementById("taskDate").value;
-      if (!name || !date) return alert("Please enter all required fields");
-      tasks.push({ name, course, priority, date });
-      updateDeadlines();
-      togglePopup();
-      document.getElementById("taskName").value = "";
-      document.getElementById("taskCourse").value = "";
-      document.getElementById("taskPriority").value = "Low";
-      document.getElementById("taskDate").value = "";
-    }
+<footer class="main-footer">
+  <p>&copy; 2025 WorkNest. All rights reserved.</p>
+</footer>
 
-    function updateDeadlines() {
-      const list = document.getElementById("deadline-list");
-      list.innerHTML = "";
-      tasks.forEach(task => {
-        const li = document.createElement("li");
-        li.textContent = `${task.date} - ${task.name} (${task.priority})`;
-        list.appendChild(li);
-      });
-    }
-
-    function renderCalendar() {
-      const calendar = document.getElementById("calendar");
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = today.getMonth();
-
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-      let table = `<table class='calendar-table'>
-        <tr><th colspan='7'>${today.toLocaleString('default', { month: 'long' })} ${year}</th></tr>
-        <tr>
-          <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
-        </tr><tr>`;
-
-      for (let i = 0; i < firstDay; i++) {
-        table += "<td></td>";
-      }
-
-      for (let day = 1; day <= daysInMonth; day++) {
-        const dateStr = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-        const taskDay = tasks.find(task => task.date === dateStr);
-        table += `<td>${day}${taskDay ? '<br><small>' + taskDay.name + '</small>' : ''}</td>`;
-        if ((firstDay + day) % 7 === 0) {
-          table += "</tr><tr>";
-        }
-      }
-
-      table += "</tr></table>";
-      calendar.innerHTML = table;
-    }
-
-    setInterval(renderCalendar, 1000);
-  </script> -->
 </body>
 </html>
