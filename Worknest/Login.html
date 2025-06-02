@@ -1,11 +1,70 @@
 <head>
   <title>WorkNest Login</title>
-  <link rel="stylesheet" href="worknest.css" />
+  <style>
+    body.login-page {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #c5c5b5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .form-card {
+      background-color: #f2ece5;
+      border-radius: 20px;
+      padding: 40px 30px;
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-card input {
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      background-color: #ffffff;
+      color: #666;
+    }
+
+    .form-card button {
+      padding: 15px;
+      border: none;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login-btn {
+      background-color: #b1c7a1;
+      color: #2e2e1d;
+    }
+
+    .create-btn {
+      background-color: #3e362d;
+      color: #ffffff;
+    }
+  </style>
 </head>
 <body class="login-page">
   <div class="container">
     <div class="logo">
-      <img src="Logo.png" alt="Worknest"width="200px"height="200px"> 
+      <img src="Logo.png" alt="WorkNest" width="450" height="450">
     </div>
     <div class="form-card">
       <input type="email" id="email" placeholder="Email">
