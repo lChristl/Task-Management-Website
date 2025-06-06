@@ -1,0 +1,372 @@
+<head>
+  <meta charset="UTF-8">
+  <title>WorkNest - Tasks</title>
+<style>
+    * {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #eae3db;
+}
+
+header {
+  background-color: #b6d1a4;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 32px;
+  color: #2c4132;
+}
+
+.logo span {
+  margin-left: 8px;
+  color: #2c4132;
+}
+
+nav a {
+  margin-left: 32px;
+  text-decoration: none;
+  font-weight: 600;
+  color: #2d2b24;
+  font-size: 24px;
+}
+
+.content {
+  padding: 32px;
+  background-color: #eae3db;
+  border-top: 1px solid #ccc;
+  padding-bottom: 80px; /* Space for the fixed footer */
+}
+
+.back-button {
+  background-color: #2d2b24;
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 12px;
+  font-weight: bold;
+  float: right;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+h2 {
+  font-size: 32px;
+  margin-top: 0;
+  color: #2d2b24;
+}
+
+.search-box {
+  margin: 32px 0;
+  width: 100%;
+  padding: 16px 48px 16px 40px;
+  border-radius: 24px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background-color:  #eae3db;
+}
+
+.all-tasks-label { /*All Tasks*/
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #3e3a31;
+  font-weight: 600;
+}
+
+.task-table {
+  width: 100%;
+  background-color: #f5f0ea;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid #3e3a31;
+}
+
+.task-table th,
+.task-table td {
+  padding: 19.2px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid #3e3a31;
+  border-right: 1px solid #3e3a31;
+}
+
+.task-table tr:last-child td {
+  border-bottom: none;
+}
+
+.task-table th:last-child,
+.task-table td:last-child {
+  border-right: none;
+}
+
+.circle-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #fff;
+  border: 2px solid #333;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  position: relative;
+}
+
+.circle-checkbox:checked::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  background-color: #333;
+  border-radius: 50%;
+}
+
+.task-actions {
+  white-space: nowrap;
+}
+
+.task-actions button {
+  background: none;
+  border: none;
+  font-size: 19.2px;
+  margin: 0 4.8px;
+  cursor: pointer;
+}
+
+.task-name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #777;
+}
+
+.main-footer {
+  background-color: #423F32;
+  color: #eae3db;
+  padding: 24px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.main-footer p {
+  margin: 0;
+  font-size: 14.4px;
+}
+
+/*logout styles*/
+
+    .p {
+      color: white;
+      font-size: 18px;
+    }
+    .toggle-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Hide the checkbox */
+    #toggleCheckbox {
+      display: none;
+    }
+
+    /* Logout word styles */
+    .logout-label {
+      color: #2d2b24;
+      cursor: pointer;
+      text-decoration: none;
+      margin-left: 32px;
+      font-weight: 600;
+      font-size: 24px;
+    }
+
+    /* Hidden container */
+    .confirm-box {
+      display: none;
+      position: absolute;
+      top: 45px; /* below logout label */
+      right: 0;
+      background-color: #3e362d;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px #00000033;
+      width: 300px;
+      z-index: 10; 
+    }
+
+    /* Show the container */
+    #toggleCheckbox:checked + .confirm-box {
+      display: block;
+    }
+
+    .confirm-box button {
+      margin-top: 10px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 30px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .confirm-box .confirm {
+      align-items: center;
+      background-color: #a4c3a2;
+      color: #3e362d;
+      font-size: 18px;
+    }
+
+
+    .confirm {
+      justify-content: center;
+      align-items: center;
+    }
+
+    /*logout styles*/
+
+    .p {
+      color: white;
+      font-size: 18px;
+    }
+    .toggle-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Hide the checkbox */
+    #toggleCheckbox {
+      display: none;
+    }
+
+    /* Logout word styles */
+    .logout-label {
+      color: #2d2b24;
+      cursor: pointer;
+      text-decoration: none;
+      margin-left: 32px;
+      font-weight: 600;
+      font-size: 24px;
+    }
+
+    /* Hidden container */
+    .confirm-box {
+      display: none;
+      position: absolute;
+      top: 45px; /* below logout label */
+      right: 0;
+      background-color: #3e362d;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px #00000033;
+      width: 250px;
+      z-index: 10; 
+    }
+
+    /* Show the container */
+    #toggleCheckbox:checked + .confirm-box {
+      display: block;
+    }
+
+    .confirm-box button {
+      margin-top: 10px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 30px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .confirm-box .confirm {
+      align-items: center;
+      background-color: #a4c3a2;
+      color: #3e362d;
+      font-size: 18px;
+    }
+
+
+    .confirm {
+      justify-content: center;
+      align-items: center;
+    }
+
+</style>
+
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="checklogo.png" width="60" height="60" alt="WorkNest Logo">
+    <span>WorkNest</span>
+  </div>
+  <nav>
+    <a href="Home-delete2.html">Home</a>
+    <a href="Calendar-deletedresume.html">Calendar</a>
+
+     <div class="toggle-container">
+        <label for="toggleCheckbox" class="logout-label">Profile</label>
+        <input type="checkbox" id="toggleCheckbox">
+
+        <div class="confirm-box">
+          <p class="p">_username</p>
+          <p class="p">_email@gmail.com</p>
+          <button class="confirm" onclick="window.location.href='Login.html';">Log out</button>
+        </div>
+      </div>
+
+  </nav>
+</header>
+
+<div class="content">
+  <button class="back-button"> <a href="Calendar-deletedresume.html" style="text-decoration: none; color: white">← Back </a></button>
+  <h2>Tasks due on June 11 2025</h2>
+
+  <input class="search-box" type="text" placeholder="Search tasks..." />
+
+  <div class="all-tasks-label">All Tasks</div>
+
+  <table class="task-table">
+    <tr>
+      <th></th>
+      <th>Task</th>
+      <th>Subject</th>
+      <th>Priority</th>
+      <th>Actions</th>
+    </tr>
+    <tr>
+      <td><input type="checkbox" class="circle-checkbox"></td>
+      <td class="task-name">Music Video</td>
+      <td>MMS</td>
+      <td>High</td>
+      <td class="task-actions">
+        <button>✎</button>
+        <button>🗑️</button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<footer class="main-footer">
+  <p>&copy; 2025 WorkNest. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
+
